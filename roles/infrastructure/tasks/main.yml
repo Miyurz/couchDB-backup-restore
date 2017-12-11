@@ -1,0 +1,28 @@
+---
+#general purpose playbook to be applied on all platforms
+- name: Create temp directory for work
+  command: mktemp -d
+  changed_when: false
+  register: temp_dir
+
+- name: Download get-pip.py
+  become: true
+  get_url: 
+    url: "{{ pip_url }}"
+    dest: /tmp
+    owner: root
+
+- name: Install pip
+  become: true
+  shell: python get-pip.py
+  args:
+    chdir: /tmp
+
+# - name: Copy requirements.txt
+- name: Install pip packages
+  become: true
+  pip:
+    requirements: pip_packages.txt
+    state: present
+    chdir: files/
+

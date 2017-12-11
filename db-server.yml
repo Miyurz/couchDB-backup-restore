@@ -1,0 +1,14 @@
+---
+- hosts: couchDB-servers:control-node
+  gather_facts: false
+  roles:
+    - common
+
+- hosts: couchDB-servers
+  any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
+  gather_facts: false
+  vars:
+    couchDBVersion: 0.1.1
+  roles:
+    - { role: couchDB , tags: couchDB }
+    #- { role: bootstrap-os, tags: bootstrap-os}

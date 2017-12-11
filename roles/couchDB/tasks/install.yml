@@ -1,0 +1,81 @@
+---
+# Reference: https://launchpad.net/~couchdb/+archive/ubuntu/stable
+- name: Install software-properties-common
+  become: true
+  apt:
+    name: software-properties-common
+
+- name: Register/add couchdb's stable personal package archive 
+  become: true
+  apt_repository:
+    repo: ppa:couchdb/stable
+
+- name: remove any existing couchdb binaries
+  become: true
+  apt:
+     name: "{{ item }}"
+     state: absent
+  with_items: "{{ couchdb_packages }}"
+
+- name: Install couchdb
+  become: true
+  apt:
+    name: couchdb
+  register: couchdb_install
+
+- name: Stop it to change ownership and secure it
+  become: yes
+  service:
+    name: couchdb
+    state: stopped
+  when: couchdb_install.changed
+
+- name: change owner of couchdb executable
+  file:
+    state: file
+    mode: 0770
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    path: /usr/bin/couchdb
+  when: couchdb_install.changed
+
+- name: secure couchdb installation
+  file:
+    state: directory
+    mode: 0770
+    owner: "{{ owner }}"
+    group: "{{ group }}"
+    path: "{{ item }}"
+  with_items:
+    - /usr/lib/couchdb
+    - /usr/share/couchdb
+    - /etc/couchdb
+  when: couchdb_install.changed
+
+- name: start couchdb
+  become: yes
+  service:
+    name: couchdb
+    state: started
+  when: couchdb_install.changed
+
+- name: setup admins
+  become: yes
+  lineinfile:
+    dest: /etc/couchdb/local.ini
+    state: present
+    line: "{{ item.key }} = {{ item.value }}"
+    regexp: "^{{ item.key }} = "
+    insertafter: "^\\[admins\\]$"
+  with_dict: "{{ couchdb_admins }}"
+  notify: restart couchdb
+
+- name: create configuration file
+  become: yes
+  template:
+    src: config.ini
+    dest: /etc/couchdb/local.d/config.ini
+    mode: 0770
+    owner: couchdb
+    group: couchdb
+  notify: restart couchdb

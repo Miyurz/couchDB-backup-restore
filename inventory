@@ -1,0 +1,11 @@
+[all]
+couchdb_node ansible_ssh_host=127.0.0.1 ansible_connection=local
+bastion      ansible_ssh_host=127.0.0.1 ansible_connection=local
+
+
+[couchDB-servers]
+couchdb_node
+
+[control-node]
+bastion
+

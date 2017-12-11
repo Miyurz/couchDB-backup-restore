@@ -1,0 +1,23 @@
+---
+owner: "mayur"
+group: "couchdb"
+couchdb_packages:
+  - couchdb 
+  - couchdb-bin 
+  - couchdb-common
+
+couchdb_url: "http://127.0.0.1:5984"
+
+couchdb_settings:
+  httpd:
+    port: "5984"
+    bind_address: "127.0.0.1"
+
+couchdb_admins: { "mayur":"mayur"}
+
+couchdb_users: 
+    mayur:
+      password: mayur123
+      role: test
+
+couchdb_databases: {"staging"}

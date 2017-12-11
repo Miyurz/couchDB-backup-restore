@@ -1,0 +1,73 @@
+---
+- name: Remove couchdb's stable personal package archivei 
+  become: true
+  apt_repository:
+    repo: ppa:couchdb/stable
+    state: absent    
+
+- name: Uninstall couchdb
+  become: true
+  apt:
+    name: couchdb
+    state: absent
+  register: couchdb_install
+
+- name: Stop it to change ownership and secure it
+  become: yes
+  service:
+    name: couchdb
+    state: stopped
+  when: couchdb_install.changed
+
+- name: Uninstall couchdb
+  become: true
+  apt:
+    name: couchdb
+    state: absent
+  register: couchdb_install
+
+- name: Delete the configuration file
+  become: true
+  file:
+    state: absent
+    path: /etc/couchdb/local.d/config.ini
+
+#- name: change owner of couchdb executable
+#  file:
+#    state: file
+#    mode: 0770
+#    owner: "{{ owner }}"
+#    group: "{{ group }}"
+#    path: /usr/bin/couchdb
+#  when: couchdb_install.changed
+
+#- name: secure couchdb installation
+#  file:
+#    state: directory
+#    mode: 0770
+#    owner: "{{ owner }}"
+#    group: "{{ group }}"
+#    path: "{{ item }}"
+#  with_items:
+#    - /usr/lib/couchdb
+#    - /usr/share/couchdb
+#    - /etc/couchdb
+#  when: couchdb_install.changed
+
+#- name: start couchdb
+#  become: yes
+#  service:
+#    name: couchdb
+#    state: started
+#  when: couchdb_install.changed
+
+#- name: setup admins
+#  become: yes
+#  lineinfile:
+#    dest: /etc/couchdb/local.ini
+#    state: present
+#    line: "{{ item.key }} = {{ item.value }}"
+#    regexp: "^{{ item.key }} = "
+#    insertafter: "^\\[admins\\]$"
+#  with_dict: "{{ couchdb_admins }}"
+#  notify: restart couchdb

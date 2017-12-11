@@ -1,0 +1,46 @@
+---
+galaxy_info:
+   author: Mayur Nagekar
+   description: Bootstrap your node to display the big banner showing the hostname/IP etc along with privacy policy guidelines.
+   company: None
+
+   # If the issue tracker for your role is not on github, uncomment the
+   # next line and provide a value
+   # issue_tracker_url: http://example.com/issue/tracker
+
+   # Some suggested licenses:
+   # - BSD (default)
+   # - MIT
+   # - GPLv2
+   # - GPLv3
+   # - Apache
+   # - CC-BY
+   license: license (GPLv2, CC-BY, etc)
+
+   min_ansible_version: 2.2.1
+
+   platforms:
+      - name: Ubuntu
+        versions:
+           - xenial
+      - name: MacOSX
+        versions:
+           - all
+      - name: Fedora
+        versions:
+           - 24
+      - name: Darwin
+        versions:
+           - all
+
+   galaxy_tags:
+      - banner
+      - motd
+      - figlet
+      - ssh
+      - mac
+      - fedora
+      - Redhat
+      - OSX
+
+dependencies: []

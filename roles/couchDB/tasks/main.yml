@@ -1,0 +1,9 @@
+---
+- include: install.yml
+  when: install is defined
+
+- include: init.yml
+  when: install is defined
+
+- include: uninstall.yml
+  when: uninstall is defined

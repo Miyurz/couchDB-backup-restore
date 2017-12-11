@@ -1,0 +1,32 @@
+# General purpose variables to be used across all groups/hosts
+pip_url: https://bootstrap.pypa.io/get-pip.py
+
+ubuntu_packages:
+  - python-dev
+  - build-essential 
+  - libssl-dev 
+  - libffi-dev
+  - shellcheck
+
+production_clusters:
+  - name: "production.k8s.{{ production_tld }}"
+    #region: eu-west-1
+    #node_size: m4.large
+    #node_count: 3
+    #master_size: m3.medium
+    #zones:
+    #  - eu-west-1a
+    #  - eu-west-1b
+    #  - eu-west-1c
+
+staging_clusters:
+  - name: "staging.k8s.{{ staging_tld }}"
+    #region: ap-southeast-1
+    #node_size: m4.xlarge
+    #node_count: 6
+    #master_size: m4.xlarge
+    #zones:
+    #  - ap-southeast-1a
+    #markets:
+    #  - bikroy
+    #  - ikman
